@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/ordered-dithering-filter/static/css/main.e8f6d7fd.css",
-    "main.js": "/ordered-dithering-filter/static/js/main.de39b782.js",
+    "main.js": "/ordered-dithering-filter/static/js/main.b538917e.js",
     "static/media/slkscr.ttf": "/ordered-dithering-filter/static/media/slkscr.2f28a155fd8444a957f2.ttf",
     "index.html": "/ordered-dithering-filter/index.html",
     "main.e8f6d7fd.css.map": "/ordered-dithering-filter/static/css/main.e8f6d7fd.css.map",
-    "main.de39b782.js.map": "/ordered-dithering-filter/static/js/main.de39b782.js.map"
+    "main.b538917e.js.map": "/ordered-dithering-filter/static/js/main.b538917e.js.map"
   },
   "entrypoints": [
     "static/css/main.e8f6d7fd.css",
-    "static/js/main.de39b782.js"
+    "static/js/main.b538917e.js"
   ]
 }

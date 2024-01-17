@@ -123,7 +123,8 @@ function Canvas(props) {
 
     return (
         <div className="Canvas">
-            <video ref={webcamRef} id="video" 
+            <video muted autoplay playsinline id="video"
+                ref={webcamRef}  
                 hidden={props.options.isDithered}
                 onCanPlay={startCamera} 
                 onPlaying={() => {requestRef.current = requestAnimationFrame(renderImage)}} />

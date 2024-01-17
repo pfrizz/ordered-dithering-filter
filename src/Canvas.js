@@ -123,7 +123,7 @@ function Canvas(props) {
 
     return (
         <div className="Canvas">
-            <video muted autoplay playsinline id="video"
+            <video muted autoPlay playsInline id="video"
                 ref={webcamRef}  
                 hidden={props.options.isDithered}
                 onCanPlay={startCamera} 

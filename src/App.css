@@ -15,6 +15,12 @@ body {
   height: 100vh;
 }
 
+a {
+  color: gray;
+  font-size: 8pt;
+  text-decoration: none; 
+}
+
 .App {
   text-align: center;
   display: flex;
@@ -28,12 +34,6 @@ body {
   flex-wrap: wrap;
   min-height: 95vh;
 }
-
-.footer {
-  color: gray;
-  font-size: 8pt;
-}
-
 
 .Options {
   min-width: 320px;

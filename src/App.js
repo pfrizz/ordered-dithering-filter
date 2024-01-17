@@ -94,7 +94,7 @@ function App() {
         <Options changeHandlers={changeHandlers} options={options}/>
       </div>
       <div className="footer">
-        <p>View source on GitHub</p>
+        <p><a href="https://github.com/pfrizz/ordered-dithering-filter/" target="_blank" rel="noreferrer">View source on GitHub</a></p>
       </div>
     </div>
   );

@@ -1,0 +1,14 @@
+{
+  "files": {
+    "main.css": "/ordered-dithering-filter/static/css/main.e8f6d7fd.css",
+    "main.js": "/ordered-dithering-filter/static/js/main.ad92c84c.js",
+    "static/media/slkscr.ttf": "/ordered-dithering-filter/static/media/slkscr.2f28a155fd8444a957f2.ttf",
+    "index.html": "/ordered-dithering-filter/index.html",
+    "main.e8f6d7fd.css.map": "/ordered-dithering-filter/static/css/main.e8f6d7fd.css.map",
+    "main.ad92c84c.js.map": "/ordered-dithering-filter/static/js/main.ad92c84c.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e8f6d7fd.css",
+    "static/js/main.ad92c84c.js"
+  ]
+}

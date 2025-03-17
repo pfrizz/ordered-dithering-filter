@@ -45,9 +45,26 @@ function Canvas({ options }) {
     }, [options.thresholdMapN.value])
 
     /**
+     * Calculates the adjustment to be applied to a given pixel based on its corresponding
+     * spot on the tiled threshold map
+     * @param {Number} index the index of the pixel in the image data array
+     * @return the adjustment value from the Bayer matrix for the given index 
+     */
+    function getThresholdAdjustment(index) {
+        let width = canvasRef.current.width;
+        let thresholdMapSize = thresholdMap[0].length;
+        let bayerR = options.ditheringIntensity.value;
+
+        let x = (index % width)  % thresholdMapSize;
+        let y = ((index / width) | 0) % thresholdMapSize;
+
+        return bayerR * ((thresholdMap[x][y] / thresholdMapSize**2)  - 0.5);
+    }
+
+    /**
      * Calculates the distance between two points in 3-D space
-     * @param p1 point in the form [x1, y1, z1]
-     * @param p2 point in the form [x2, y2, z2]
+     * @param {Number[]} p1 point in the form [x1, y1, z1]
+     * @param {Number[]} p2 point in the form [x2, y2, z2]
      * @returns the distance between the two points
      */
     function distanceFormula(p1, p2) {
@@ -57,73 +74,72 @@ function Canvas({ options }) {
         return Math.sqrt(deltaX**2 + deltaY**2 + deltaZ**2);
     }
 
+
     /**
-     * Applies brightness filter and then changes each pixel to its closest color in palette
+     * Finds the closest color in the current palette to any given color
+     * @param {Number[]} pixelColor an array representing the rgb values of a pixel
+     * @returns the closest color to the pixel in the palette in the form [red, green, blue]
      */
-    function recolorCanvas () {
+    function findClosestColor([red, green, blue]) {
+        let closestColor = options.palette.value[0];
+        let closestColorDistance = distanceFormula([red, green, blue], closestColor);
+
+        for(let i = 1; i < options.palette.value.length; i++){
+            let distance = distanceFormula([red, green, blue], options.palette.value[i]);
+            if(distance < closestColorDistance) {
+                closestColor = options.palette.value[i];
+                closestColorDistance = distance;
+            }
+        }
+
+        return closestColor;
+    }
+
+    /**
+     * Apply brightness, dithering, and palette to image currently on canvas
+     */
+    function recolorCanvas() {
         let width = canvasRef.current.width;
         let height = canvasRef.current.height;
         const imageData = context.getImageData(0, 0, width, height);
         const data = imageData.data;
 
         for(let i = 0; i < data.length; i += 4) {
-            // apply brightness changes
-            data[i] += options.brightness.value;
-            data[i + 1] += options.brightness.value;
-            data[i + 2] += options.brightness.value;
-            
+            let pixelIndex = i / 4;
+            let recoloredPixel = [data[i], data[i + 1], data[i + 2]];
+
+            recoloredPixel = recoloredPixel.map(colorChannel => colorChannel + options.brightness.value);
             if(options.isDithered.value) {
-                let thresholdMapSize = thresholdMap[0].length;
-                let bayerR = options.ditheringIntensity.value;
-    
-                // get pixel's corresponding spot on tiled threshold map
-                let x = ((i / 4) % width)  % thresholdMapSize;
-                let y = (((i/ 4) / width) | 0) % thresholdMapSize;
-    
-                // apply threshold map to all color channels of current pixel
-                data[i] += bayerR * ((thresholdMap[x][y] / thresholdMapSize**2)  - 0.5);
-                data[i + 1] += bayerR * ((thresholdMap[x][y] / thresholdMapSize**2) - 0.5);
-                data[i + 2] += bayerR * ((thresholdMap[x][y] / thresholdMapSize**2) - 0.5);
+                recoloredPixel = recoloredPixel.map(colorChannel => colorChannel + getThresholdAdjustment(pixelIndex));
             }
+            recoloredPixel = findClosestColor(recoloredPixel);
 
-            // now find color in palette closest to pixel's value using distance formula
-            let closestColor = options.palette.value[0];
-            let closestColorDistance = distanceFormula([data[i], data[i+1], data[i+2]], closestColor);
-            for(let j = 1; j < options.palette.value.length; j++){
-                let distance = distanceFormula([data[i], data[i+1], data[i+2]], options.palette.value[j]);
-                if(distance < closestColorDistance) {
-                    closestColor = options.palette.value[j];
-                    closestColorDistance = distance;
-                }
-            }
-
-            data[i] = closestColor[0];
-            data[i + 1] = closestColor[1];
-            data[i + 2] = closestColor[2];
+            [data[i], data[i + 1], data[i + 2]] = recoloredPixel
         }
 
         context.putImageData(imageData, 0, 0);
     }
 
     /**
-     * Pixelates image currently on the canvas and runs it through recoloring
+     * Applies image processing to canvas and creates animation loop 
      */
-    function processCanvas() {
+    function drawProcessedFrame() {
         context.msImageSmoothingEnabled = false;
         context.mozImageSmoothingEnabled = false;
         context.webkitImageSmoothingEnabled = false;
         context.imageSmoothingEnabled = false;
 
-        // scale down image, recolor it, and then scale it back up to achieve pixelated look
         let width = canvasRef.current.width;
         let height = canvasRef.current.height;
         let resizedWidth = Math.floor(width / options.pixelSize.value);
         let resizedHeight = Math.floor(height / options.pixelSize.value);
+
+        // scale down image, recolor it, and then scale it back up to achieve pixelated look
         context.drawImage(webcamRef.current, 0, 0, resizedWidth, resizedHeight);
         recolorCanvas();
         context.drawImage(canvasRef.current, 0, 0, resizedWidth, resizedHeight, 0, 0, width, height);
 
-        requestRef.current = requestAnimationFrame(processCanvas);
+        requestRef.current = requestAnimationFrame(drawProcessedFrame);
     }
 
     function startProcessedFeed() {
@@ -141,7 +157,7 @@ function Canvas({ options }) {
             canvasRef.current.height = webcamRef.current.videoHeight;
         }
 
-        requestRef.current = requestAnimationFrame(processCanvas);
+        requestRef.current = requestAnimationFrame(drawProcessedFrame);
     }
 
     // reload image processing on re-render (when options state changes)

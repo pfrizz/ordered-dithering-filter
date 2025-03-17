@@ -1,6 +1,6 @@
 @font-face {
-  font-family: 'Silkscreen'; /*a name to be used later*/
-  src: url('../public/slkscr.ttf') format('truetype'); /*URL to font*/
+  font-family: 'Silkscreen';
+  src: url('../public/slkscr.ttf') format('truetype');
 }
 
 body {
@@ -74,6 +74,7 @@ input:hover {
 
 .Canvas {
   border: 5px solid bisque;
+  background: bisque;
 }
 
 canvas {
@@ -84,15 +85,7 @@ canvas {
   padding: 10px;
 }
 
-.Options > .brightness-slider {
-  text-align: center;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0px;
-}
-
-.Options > .pixel-size-slider {
+.Options > .slider {
   display: flex;
   justify-content: space-between;
   padding: 0px;

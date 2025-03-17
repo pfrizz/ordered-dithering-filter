@@ -1,5 +1,5 @@
-export const INITIAL_THRESHOLD_MAP = [[0, 2],
-                                      [3, 1]]
+export const BASE_THRESHOLD_MAP = [[0, 2],
+                                   [3, 1]]
 
 export const PALETTES = {
     BLACK_AND_WHITE: [[0, 0, 0], [256, 256, 256]],
@@ -8,3 +8,10 @@ export const PALETTES = {
     RED_GREEN_BLUE: [[0, 0, 0], [255, 0, 0], [0, 255, 0], [0, 0, 255], [255, 255, 255]],
     RGB_3_BIT: [[0, 0, 0], [255, 255, 255], [255, 0, 0], [255, 255, 0], [0, 255, 0], [0, 255, 255], [0, 0, 255], [255, 0, 255]]
 }
+
+export const DEFAULT_BRIGHTNESS = 0;
+export const DEFAULT_PIXEL_SIZE = 2;
+export const DEFAULT_IS_DITHERED = true;
+export const DEFAULT_DITHERING_INTENSITY = 50;
+export const DEFAULT_THRESHOLD_MAP_N = 3;
+export const DEFAULT_PALETTE = PALETTES.GAMEBOY;

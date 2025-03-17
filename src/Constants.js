@@ -12,6 +12,6 @@ export const PALETTES = {
 export const DEFAULT_BRIGHTNESS = 0;
 export const DEFAULT_PIXEL_SIZE = 2;
 export const DEFAULT_IS_DITHERED = true;
-export const DEFAULT_DITHERING_INTENSITY = 50;
+export const DEFAULT_DITHERING_INTENSITY = 128;
 export const DEFAULT_THRESHOLD_MAP_N = 3;
 export const DEFAULT_PALETTE = PALETTES.RGB_3_BIT;
